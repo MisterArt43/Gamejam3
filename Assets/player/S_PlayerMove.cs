@@ -6,24 +6,26 @@ public class PlayerSpaceMovement : MonoBehaviour
 
 
     //-----Mouvement----------
+    private Rigidbody rb;
     private InputAction moveAction;
+    private InputAction sprintAction;
+    private Vector2 currentMoveInput;
 
     [Header("Paramètres de mouvement spatial")]
     [SerializeField] private float thrustForce = 10f; // Force de propulsion
     [SerializeField] private float maxSpeed = 100f; // Vitesse maximale
 
     private float thrustForceSprint; // Force de propulsion sprint
-
-    private InputAction sprintAction;
-    
-    private Vector2 currentMoveInput;
-    public float rotationSpeed = 250f;
-
     //-----Mouvement----------
 
-    // private InputAction hitAction;
-    private Rigidbody rb;
+    // "View"
+    private InputAction viewAction;
+    private Vector2 currentViewInput;
+    public float rotationSpeed = 250f;
 
+
+
+    // private InputAction hitAction;
 
 
     private void Start()
@@ -39,6 +41,7 @@ public class PlayerSpaceMovement : MonoBehaviour
 
         // Références aux actions 
         moveAction = InputSystem.actions.FindAction("Move");
+        viewAction = InputSystem.actions.FindAction("View");
         sprintAction = InputSystem.actions.FindAction("Sprint"); 
         // hitAction = InputSystem.actions.FindAction("Hit"); // do not touch atm its will be used to hit bullet
 
@@ -49,6 +52,8 @@ public class PlayerSpaceMovement : MonoBehaviour
         moveAction.performed += OnMoveChanged;
         moveAction.canceled += OnMoveChanged;
 
+        viewAction.performed += OnViewChanged;
+        viewAction.canceled += OnViewChanged;
 
 
     }
@@ -56,23 +61,29 @@ public class PlayerSpaceMovement : MonoBehaviour
     private void OnMoveChanged(InputAction.CallbackContext context)
     {
         currentMoveInput = context.ReadValue<Vector2>();
+    }
 
+    private void OnViewChanged(InputAction.CallbackContext context)
+    {
+        currentViewInput = context.ReadValue<Vector2>();
     }
 
     void FixedUpdate()
     {
         HandlePhysicsMovement();
-
-        // Utilise seulement l'axe horizontal pour la rotation (A = -1, D = 1)
-        float horizontal = currentMoveInput.x;
-        transform.Rotate(Vector3.up, horizontal * rotationSpeed * Time.deltaTime);
+        HandleViewMovement();
     }
 
+    void    HandleViewMovement()
+    {
+        float horizontal = currentViewInput.x;
+        transform.Rotate(Vector3.up, horizontal * rotationSpeed * Time.deltaTime);
+    }
 
     private void HandlePhysicsMovement()
     {
         // Mouvement horizontal
-        Vector3 moveDirection = new Vector3(currentMoveInput.x, 0f, currentMoveInput.y);
+        Vector3 moveDirection = new Vector3(0f, 0f, currentMoveInput.y);
 
 
         // Applique la force relative à la rotation de l'objet
@@ -84,7 +95,6 @@ public class PlayerSpaceMovement : MonoBehaviour
             // Sprint : thurstForce * 10f;
             if (sprintAction.IsPressed())
             {
-                Debug.Log("sprint pressed");
                 rb.AddForce(worldMoveDirection.normalized * thrustForceSprint, ForceMode.Acceleration);
             }
             else
