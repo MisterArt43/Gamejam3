@@ -149,5 +149,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f35131b4d724e44f6ac3953233092458, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thrustForce: 10000
-  maxSpeed: 1e+18
+  thrustForce: 50
+  maxSpeed: 100
+  rotationSpeed: 100
