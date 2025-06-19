@@ -15,5 +15,4 @@ public class S_CameraFollow : MonoBehaviour
         // Vue strictement vers le bas (optionnel si ta caméra est déjà orientée à 90° en X)
         transform.rotation = Quaternion.Euler(70f, 0f, 0f);
     }
-
 }
