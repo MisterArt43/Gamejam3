@@ -31,6 +31,54 @@ uint hash(uint kx)
   return c;
 }
 
+uint hash4(uint kx, uint ky, uint kz, uint kw)
+{
+	uint a, b, c;
+	a = b = c = 0xdeadbeef + (4 << 2) + 13;
+
+	a += kx;
+	b += ky;
+	c += kz;
+	//mix
+	a -= c;
+	a ^= hash_bit_rotate(c, 4);
+	c += b;
+	b -= a;
+	b ^= hash_bit_rotate(a, 6);
+	a += c;
+	c -= b;
+	c ^= hash_bit_rotate(b, 8);
+	b += a;
+	a -= c;
+	a ^= hash_bit_rotate(c, 16);
+	c += b;
+	b -= a;
+	b ^= hash_bit_rotate(a, 19);
+	a += c;
+	c -= b;
+	c ^= hash_bit_rotate(b, 4);
+	b += a;
+
+	a += kw;
+	//final
+	c ^= b;
+	c -= hash_bit_rotate(b, 14);
+	a ^= c;
+	a -= hash_bit_rotate(c, 11);
+	b ^= a;
+	b -= hash_bit_rotate(a, 25);
+	c ^= b;
+	c -= hash_bit_rotate(b, 16);
+	a ^= c;
+	a -= hash_bit_rotate(c, 4);
+	b ^= a;
+	b -= hash_bit_rotate(a, 14);
+	c ^= b;
+	c -= hash_bit_rotate(b, 24);
+
+	return c;
+}
+
 uint hash_float(float kx)
 {
   return hash(asuint(kx));

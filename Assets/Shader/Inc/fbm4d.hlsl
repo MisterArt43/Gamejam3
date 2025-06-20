@@ -2,6 +2,7 @@
 #define FBM4D_INCLUDED
 
 #include "simplex.hlsl"
+#include "perlin.hlsl"
 #include "hashes.hlsl"
 
 float signed_noise_float(float4 position)
@@ -15,7 +16,8 @@ float signed_noise_float(float4 position)
 	* this usually shouldn't be noticeable. */
 	position = fmod(position, 100000.0f) + precision_correction;
 
-	return SimplexNoise4D(position) * 0.8344f;
+	//return SimplexNoise4D(position) * 0.8344f;
+	return perlin_noise4d(position) * 0.8344f;
 }
 
 float fbm(float4 p, float detail, float roughness, float lacunarity)
