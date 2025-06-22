@@ -19,7 +19,7 @@ public class S_Enemy : S_Pawn
         }
     }
 
-    void idleMove()
+    void IdleMove()
     {
         // randomly move the enemy pawn around
         Vector3 randomDirection = Random.insideUnitSphere * 5f; // Random direction within a sphere of radius 5
@@ -37,7 +37,7 @@ public class S_Enemy : S_Pawn
         }
     }
 
-    void checkForTarget()
+    void CheckForTarget()
     {
         // Check for nearby targets (e.g., player pawns) within a certain range
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRange);
@@ -80,7 +80,8 @@ public class S_Enemy : S_Pawn
     {
         if (target == null)
         {
-            checkForTarget(); // Check for targets if none is currently set
+            CheckForTarget(); // Check for targets if none is currently set
+            IdleMove(); // Move the enemy pawn randomly when not engaged with a target
         }
         else
         {
@@ -93,11 +94,17 @@ public class S_Enemy : S_Pawn
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
             }
 
-            // Optionally, you can implement attacking logic here
-            // For example, firing projectiles from turrets at the target
+            // Check if the target is within range to attack
+            if (Vector3.Distance(transform.position, target.transform.position) <= detectionRange)
+            {
+                AttackTarget(); // Attack the target if within range
+            }
+            else
+            {
+                target = null; // Clear the target if it's out of range
+            }
         }
 
-        idleMove(); // Move the enemy pawn randomly when not engaged with a target
     }
 
     // Update is called once per frame

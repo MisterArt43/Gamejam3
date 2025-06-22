@@ -48,13 +48,18 @@ public class S_Projectile : MonoBehaviour
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    void Awake()
     {
         creationTime = Time.time; // Record the time when the projectile is created
         Destroy(gameObject, lifetime); // Destroy the projectile after its lifetime expires
         if (TryGetComponent<Rigidbody>(out var rb))
         {
             rb.linearVelocity = transform.forward * speed; // Set the velocity of the projectile
+
+            //lock the y position of the projectile to prevent it from falling
+            rb.constraints = RigidbodyConstraints.FreezePositionY; // Freeze the Y position of the projectile
+            //lock z and x rotation of the projectile to prevent it from rotating (2D game)
+            rb.constraints |= RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ; // Freeze the X and Z rotations of the projectile
         }
         else
         {
@@ -68,6 +73,14 @@ public class S_Projectile : MonoBehaviour
         this.speed = speed; // Set the speed of the projectile
         this.rotationSpeed = rotationSpeed; // Set the rotation speed of the projectile
         this.damageType = damageType; // Set the type of damage dealt by the projectile
+
+        //set the projectile to move forward at the specified speed
+        if (TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.linearVelocity = transform.forward * speed; // Set the velocity of the projectile
+                                                           // set the angular velocity to rotate the projectile around its axis
+            rb.angularVelocity = Vector3.up * rotationSpeed; // Set the angular velocity of the projectile
+        }
     }
     public void Initialize(int damage, float speed, float rotationSpeed, DamageType damageType, int subProjectileCount, float setSubProjectileInterval, GameObject subProjectilePrefab, ProjectilePattern projectilePattern)
     {
@@ -79,10 +92,19 @@ public class S_Projectile : MonoBehaviour
         this.setSubProjectileInterval = setSubProjectileInterval; // Set the time interval between sub-projectile spawns
         this.subProjectilePrefab = subProjectilePrefab; // Set the prefab for sub-projectiles
         this.projectilePattern = projectilePattern; // Set the pattern for sub-projectiles
+
+        //set the projectile to move forward at the specified speed
+        if (TryGetComponent<Rigidbody>(out var rb))
+        {
+            rb.linearVelocity = transform.forward * speed; // Set the velocity of the projectile
+                                                           // set the angular velocity to rotate the projectile around its axis
+            rb.angularVelocity = Vector3.up * rotationSpeed; // Set the angular velocity of the projectile
+        }
     }
 
     void SpawnSubProjectiles()
     {
+        Debug.Log($"Spawning {subProjectileCount} sub-projectiles with pattern {projectilePattern} at interval {setSubProjectileInterval} seconds.");
         if (subProjectilePrefab == null || subProjectileCount <= 0)
         {
             Debug.LogWarning("Sub projectile prefab is not set or sub projectile count is zero. No sub-projectiles will be spawned.");
@@ -117,15 +139,16 @@ public class S_Projectile : MonoBehaviour
             }
             switch (projectilePattern)
             {
-                case ProjectilePattern.Spiral:
-                case ProjectilePattern.Circle:
+                case ProjectilePattern.Spiral: // Spiral pattern for sub-projectiles should rotate around the main projectile
                     spawnRotation = Quaternion.Euler(0, i * angleOffset, 0) * spawnRotation; // Rotate the sub-projectile based on the angle offset
+                    break;
+                case ProjectilePattern.Circle: // Circular pattern for sub-projectiles should go straight out from the main projectile
                     break;
                 case ProjectilePattern.Perpendicular:
                     spawnRotation = Quaternion.Euler(90, 0, 0) * spawnRotation; // Rotate the sub-projectile to face upwards
                     break;
                 case ProjectilePattern.Cone:
-                    spawnRotation = Quaternion.Euler(0, i * angleOffset / 2, 0) * spawnRotation; // Rotate the sub-projectile to create a cone effect
+                    spawnRotation = Quaternion.Euler(0, (i * angleOffset / 2) - 90, 0) * spawnRotation; // Rotate the sub-projectile to create a cone effect 
                     break;
                 default:
                     break;
@@ -140,6 +163,8 @@ public class S_Projectile : MonoBehaviour
             {
                 Debug.LogWarning("Rigidbody component is missing on the sub projectile prefab. Please add a Rigidbody to the sub projectile prefab.");
             }
+
+            GameObject subProjectile = Instantiate(subProjectilePrefab, spawnPosition, spawnRotation); // Instantiate the sub-projectile
         }
     }
 
@@ -154,6 +179,7 @@ public class S_Projectile : MonoBehaviour
         // Check if the projectile should spawn sub-projectiles
         if (subProjectileCount > 0 && subProjectilePrefab != null && setSubProjectileInterval > 0f)
         {
+            // Debug.Log($"Checking if sub-projectiles should be spawned. Current count: {subProjectileCount}, Interval: {setSubProjectileInterval} seconds.");
             float elapsedTime = Time.time - creationTime; // Calculate elapsed time since projectile creation
             if (elapsedTime >= setSubProjectileInterval)
             {

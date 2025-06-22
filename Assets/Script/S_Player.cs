@@ -4,12 +4,29 @@ using UnityEngine.InputSystem;
 public class S_Player : S_Pawn
 {
     private S_Turret[] turrets; // Array to hold the player's turrets
+    private InputAction fireAction; // Action for firing with the turrets
     void Start()
     {
         InitTurrets(); // Initialize turrets for the player pawn
         this.faction = PawnFaction.Player; // Set the faction of the player pawn
 
         turrets = GetComponentsInChildren<S_Turret>(); // Get all turrets attached to the player pawn
+
+        fireAction = InputSystem.actions.FindAction("Attack"); // Find the fire action in the input system
+
+        fireAction.performed += ctx => FireTurrets(); // Subscribe to the fire action
+
+    }
+
+    void FireTurrets()
+    {
+        foreach (S_Turret turret in turrets)
+        {
+            if (turret != null)
+            {
+                turret.Fire(); // Call the Fire method on each turret
+            }
+        }
     }
 
     // Update is called once per frame

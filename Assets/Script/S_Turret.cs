@@ -30,8 +30,8 @@ public class S_Turret : MonoBehaviour
             if (projectilePrefab != null && firePoint != null)
             {
                 GameObject projectile = Instantiate(projectilePrefab, firePoint.position, firePoint.rotation);
-                // Add logic to initialize the projectile, e.g., setting its damage and speed
-                // projectile.GetComponent<Projectile>().Initialize(damage, range);
+                // S_Projectile projectileScript = projectile.GetComponent<S_Projectile>();
+                // notabene if i want to set the projectile's properties, i can do it here
             }
             else
             {

@@ -34091,7 +34091,7 @@ MonoBehaviour:
   range: 10
   fireRate: 1
   rotationSpeed: 3
-  projectilePrefab: {fileID: 8177455934005749831, guid: f21d049a4afa353c3958c2f8da9bff52, type: 3}
+  projectilePrefab: {fileID: 8177455934005749831, guid: 32989f265c5ac94578ffc87d4f2c4a06, type: 3}
   firePoint: {fileID: 556963368994807834}
 --- !u!1 &473154559698940291
 GameObject:
