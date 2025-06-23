@@ -152,4 +152,10 @@ public class S_Projectile : MonoBehaviour
             damageType = damageType
         };
     }
+
+    internal void GetDamageInfo(out int damage, out DamageType damageType)
+    {
+        damage = this.damage;
+        damageType = this.damageType;
+    }
 }
