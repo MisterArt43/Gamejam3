@@ -13,7 +13,7 @@ partial struct TestNetcodeEntitiesClientSystem : ISystem
     [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
-
+        
     }
 
     [BurstCompile]
