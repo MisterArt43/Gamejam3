@@ -32,7 +32,11 @@ partial struct ShootSystem : ISystem
                     Debug.Log("Shooting action detected!" + state.World);
 
                     Entity bulletEntity = entityCommandBuffer.Instantiate(entitiesReference.bulletPrefabEntity);
-                    // entityCommandBuffer.SetComponent(bulletEntity, LocalTransform.FromPosition());
+                    entityCommandBuffer.SetComponent(
+                        bulletEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
+                        entityCommandBuffer.SetComponent(bulletEntity, new GhostOwner {
+                            NetworkId = netcodePlayerInputData.ValueRO.networkId
+                        });
                 }
             }
         }

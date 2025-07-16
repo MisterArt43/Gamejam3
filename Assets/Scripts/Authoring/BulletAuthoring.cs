@@ -4,7 +4,6 @@ using UnityEngine;
 
 class BulletAuthoring : MonoBehaviour
 {
-    public float speed;
     public float Speed = 10f; // Speed of the bullet
     public float Damage = 5f; // Damage dealt by the bullet
     public float Lifetime = 2f; // Time before the bullet is destroyed
