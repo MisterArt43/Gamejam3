@@ -23,8 +23,8 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
             Speed = authoring.Speed
         });
 
-        AddComponent(entity, new InputMovementData
-        { });
+        // AddComponent(entity, new InputMovementData
+        // { });
         
         
     }

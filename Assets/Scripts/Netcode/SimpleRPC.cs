@@ -1,7 +1,7 @@
 using Unity.NetCode;
 using UnityEngine;
 
-public class SimpleRPC : IRpcCommand
+public struct SimpleRpc : IRpcCommand
 {
     public int value;
 }
