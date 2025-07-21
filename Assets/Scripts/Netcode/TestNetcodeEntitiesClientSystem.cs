@@ -12,7 +12,7 @@ partial struct TestNetcodeEntitiesClientSystem : ISystem
 
     }
 
-    // [BurstCompile]
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         bool hasInput = false;
@@ -33,7 +33,7 @@ partial struct TestNetcodeEntitiesClientSystem : ISystem
                 value = 56
             });
             state.EntityManager.AddComponentData(rpcEntity, new SendRpcCommandRequest());
-            Debug.Log("RPC sent...");
+            // Debug.Log("RPC sent...");
         }
     }
 

@@ -10,36 +10,32 @@ partial struct ShootSystem : ISystem
     [BurstCompile]
     public void OnCreate(ref SystemState state)
     {
-
+        state.RequireForUpdate<NetworkStreamInGame>();
     }
 
-    // [BurstCompile]
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
         EntitiesReferences entitiesReference = SystemAPI.GetSingleton<EntitiesReferences>();
 
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
-        foreach ((RefRO<NetcodePlayerInputData> netcodePlayerInputData, RefRO<LocalTransform> localTransform)
-        in SystemAPI.Query<RefRO<NetcodePlayerInputData>, RefRO<LocalTransform>>()
-            .WithAll<Simulate>())
+        foreach ((RefRO<NetcodePlayerInputData> netcodePlayerInputData, RefRO<LocalTransform> localTransform, RefRO<GhostOwner> ghostOwner)
+        in SystemAPI.Query<RefRO<NetcodePlayerInputData>, RefRO<LocalTransform>, RefRO<GhostOwner>>().WithAll<Simulate>())
         {
-
             if (networkTime.IsFirstTimeFullyPredictingTick)
             {
                 if (netcodePlayerInputData.ValueRO.shoot.IsSet)
                 {
-                    Debug.Log("Shooting action detected!" + state.World);
+                    // Debug.Log("Shooting action detected!" + state.World);
 
                     Entity bulletEntity = entityCommandBuffer.Instantiate(entitiesReference.bulletPrefabEntity);
-                    entityCommandBuffer.SetComponent(
-                        bulletEntity, LocalTransform.FromPosition(localTransform.ValueRO.Position));
-                        entityCommandBuffer.SetComponent(bulletEntity, new GhostOwner {
-                            NetworkId = netcodePlayerInputData.ValueRO.networkId
-                        });
+                    entityCommandBuffer.SetComponent(bulletEntity, LocalTransform.FromPositionRotation(localTransform.ValueRO.Position, localTransform.ValueRO.Rotation));
+                    entityCommandBuffer.SetComponent(bulletEntity, new GhostOwner { NetworkId = ghostOwner.ValueRO.NetworkId });
                 }
             }
         }
+        entityCommandBuffer.Playback(state.EntityManager);
     }
 
     [BurstCompile]

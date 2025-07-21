@@ -222,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 1563052170}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -2.7, z: 0}
   m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -258,6 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefabGameObject: {fileID: 8098424964321193739, guid: 9065f1602468e2f4a8bf1e848e12aab9, type: 3}
+  bulletPrefabGameObject: {fileID: 830539131579482340, guid: c248241bfebec7e4daef6a678e55a276, type: 3}
 --- !u!4 &1641744122
 Transform:
   m_ObjectHideFlags: 0

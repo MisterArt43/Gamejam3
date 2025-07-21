@@ -12,7 +12,7 @@ partial struct TestNetcodeEntitiesServerSystem : ISystem
         
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
@@ -23,7 +23,7 @@ partial struct TestNetcodeEntitiesServerSystem : ISystem
         RefRO<SimpleRpc>,
         RefRO<ReceiveRpcCommandRequest>>().WithEntityAccess())
         {
-            Debug.Log($"Received RPC with value: {simpleRpc.ValueRO.value} :: {receiveRpcCommandRequest.ValueRO.SourceConnection}");
+            // Debug.Log($"Received RPC with value: {simpleRpc.ValueRO.value} :: {receiveRpcCommandRequest.ValueRO.SourceConnection}");
             entityCommandBuffer.DestroyEntity(entity);
         }
         entityCommandBuffer.Playback(state.EntityManager);

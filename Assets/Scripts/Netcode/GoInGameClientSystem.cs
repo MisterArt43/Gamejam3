@@ -13,7 +13,7 @@ partial struct GoInGameClientSystem : ISystem
         state.RequireForUpdate<NetworkId>();
     }
 
-    //[BurstCompile]
+    [BurstCompile]
     public void OnUpdate(ref SystemState state)
     {
         EntityCommandBuffer entityCommandBuffer = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
@@ -25,7 +25,7 @@ partial struct GoInGameClientSystem : ISystem
             RefRO<NetworkId>>().WithNone<NetworkStreamInGame>().WithEntityAccess())
         {
             entityCommandBuffer.AddComponent<NetworkStreamInGame>(entity);
-            Debug.Log("Setting Client as InGame");
+            // Debug.Log("Setting Client as InGame");
 
             Entity rpcEntity = entityCommandBuffer.CreateEntity();
             entityCommandBuffer.AddComponent(rpcEntity, new GoInGameRequestRpc());

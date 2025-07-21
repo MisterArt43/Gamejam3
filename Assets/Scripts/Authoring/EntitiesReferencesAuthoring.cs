@@ -14,10 +14,7 @@ class EntitiesReferencesAuthoringBaker : Baker<EntitiesReferencesAuthoring>
         Entity entity = GetEntity(TransformUsageFlags.Dynamic);
         AddComponent(entity, new EntitiesReferences
         {
-            playerPrefabEntity = GetEntity(authoring.playerPrefabGameObject, TransformUsageFlags.Dynamic)
-        });
-        AddComponent(entity, new EntitiesReferences
-        {
+            playerPrefabEntity = GetEntity(authoring.playerPrefabGameObject, TransformUsageFlags.Dynamic),
             bulletPrefabEntity = GetEntity(authoring.bulletPrefabGameObject, TransformUsageFlags.Dynamic)
         });
     }

@@ -21,6 +21,7 @@ partial struct NetcodePlayerInputSystem : ISystem
             RefRW<NetcodePlayerInputData> netcodePlayerInputData
             in SystemAPI.Query<RefRW<NetcodePlayerInputData>>().WithAll<GhostOwnerIsLocal>())
         {
+            netcodePlayerInputData.ValueRW.mousePosition = Input.mousePosition;
             float2 inputVector = new float2();
             if (Input.GetKey(KeyCode.W))
             {
@@ -42,7 +43,7 @@ partial struct NetcodePlayerInputSystem : ISystem
 
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Mouse0))
             {
-                Debug.Log("Shooting!");
+                // Debug.Log("Shooting!");
                 netcodePlayerInputData.ValueRW.shoot.Set();
             }
             else

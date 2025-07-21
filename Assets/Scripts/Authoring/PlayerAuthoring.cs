@@ -22,10 +22,5 @@ class PlayerAuthoringBaker : Baker<PlayerAuthoring>
             Shield = authoring.Shield,
             Speed = authoring.Speed
         });
-
-        // AddComponent(entity, new InputMovementData
-        // { });
-        
-        
     }
 }
